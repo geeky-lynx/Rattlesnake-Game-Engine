@@ -16,7 +16,7 @@ pub fn build(b: *std.Build) void {
 
     const optimize = b.standardOptimizeOption(.{});
 
-    const cpp_flags = &[_][]const u8{ "-std=c++14", "-Wall", "-Wextra" };
+    const cpp_flags = &[_][]const u8{ "-std=c++23", "-Wall", "-Wextra" };
 
     // const lib = b.addStaticLibrary(.{
     //     .name = "Rattlesnake-Game-Engine",
@@ -42,6 +42,7 @@ pub fn build(b: *std.Build) void {
 
     exe.addCSourceFile(.{ .file = b.path("include/glad/glad.c") });
     exe.addCSourceFile(.{ .file = b.path("main.cpp"), .flags = cpp_flags });
+    exe.addCSourceFile(.{ .file = b.path("shader-compiler.cpp"), .flags = cpp_flags });
 
     exe.linkLibCpp();
 

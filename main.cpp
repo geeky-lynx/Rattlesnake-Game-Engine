@@ -3,21 +3,7 @@
 #include <iostream>
 #include <cstdint>
 
-constexpr const char* VERTEX_SHADER_SOURCE =
-  "#version 330 core\n"
-  "layout (location = 0) in vec3 aPos;\n"
-  "void main() {\n"
-  "  gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f);\n"
-  "}\n\0"
-;
-
-constexpr const char* FRAGMENT_SHADER_SOURCE =
-  "#version 330 core\n"
-  "out vec4 FragColor;\n"
-  "void main() {\n"
-  "  FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-  "}\n\0"
-;
+#include "shader-compiler.hpp"
 
 void framebuffer_resize_callback(GLFWwindow *window, int width, int height) {
   glViewport(0, 0, width, height);
@@ -68,29 +54,13 @@ int main(void) {
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  uint32_t vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertex_shader_id, 1, &VERTEX_SHADER_SOURCE, nullptr);
-  glCompileShader(vertex_shader_id);
-
   int success;
   char message[512] = {0};
-  glGetShaderiv(vertex_shader_id, GL_COMPILE_STATUS, &success);
-  if (!success) {
-    glGetShaderInfoLog(vertex_shader_id, 512, nullptr, message);
-    std::cout << "\x1b[31m[ERROR]: Vertex Shader Compilation failed\x1b[37m" << std::endl
-      << message << std::endl;
-  }
+  auto vertex_shader = ShaderCompiler::compile_sourcefile("main.vert.glsl", GL_VERTEX_SHADER);
+  uint32_t vertex_shader_id = vertex_shader.value();
 
-  uint32_t fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragment_shader_id, 1, &FRAGMENT_SHADER_SOURCE, nullptr);
-  glCompileShader(fragment_shader_id);
-
-  glGetShaderiv(fragment_shader_id, GL_COMPILE_STATUS, &success);
-  if (!success) {
-    glGetShaderInfoLog(fragment_shader_id, 512, nullptr, message);
-    std::cout << "\x1b[31m[ERROR]: Fragment Shader Compilation failed\x1b[37m" << std::endl
-      << message << std::endl;
-  }
+  auto fragment_shader = ShaderCompiler::compile_sourcefile("main.frag.glsl", GL_FRAGMENT_SHADER);
+  uint32_t fragment_shader_id = fragment_shader.value();
 
   uint32_t shader_program = glCreateProgram();
   glAttachShader(shader_program, vertex_shader_id);
