@@ -1,9 +1,9 @@
-#include "include/glad/glad.h"
+#include "../include/glad/glad.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <cstdint>
 
-#include "shader-compiler.hpp"
+#include "shader/shader-compiler.hpp"
 
 const float vertices[] = {
      0.5f,  0.5f,  0.0f, // top right
@@ -53,10 +53,10 @@ int main(void) {
 
   int success;
   char message[512] = {0};
-  auto vertex_shader = ShaderCompiler::compile_sourcefile("main.vert.glsl", GL_VERTEX_SHADER);
+  auto vertex_shader = Shader::compile_sourcefile("src/main.vert.glsl", GL_VERTEX_SHADER);
   uint32_t vertex_shader_id = vertex_shader.value();
 
-  auto fragment_shader = ShaderCompiler::compile_sourcefile("main.frag.glsl", GL_FRAGMENT_SHADER);
+  auto fragment_shader = Shader::compile_sourcefile("src/main.frag.glsl", GL_FRAGMENT_SHADER);
   uint32_t fragment_shader_id = fragment_shader.value();
 
   uint32_t shader_program = glCreateProgram();

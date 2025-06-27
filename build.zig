@@ -41,8 +41,8 @@ pub fn build(b: *std.Build) void {
     });
 
     exe.addCSourceFile(.{ .file = b.path("include/glad/glad.c") });
-    exe.addCSourceFile(.{ .file = b.path("main.cpp"), .flags = cpp_flags });
-    exe.addCSourceFile(.{ .file = b.path("shader-compiler.cpp"), .flags = cpp_flags });
+    exe.addCSourceFile(.{ .file = b.path("src/main.cpp"), .flags = cpp_flags });
+    exe.addCSourceFile(.{ .file = b.path("src/shader/shader-compiler.cpp"), .flags = cpp_flags });
 
     exe.linkLibCpp();
 

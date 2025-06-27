@@ -5,7 +5,7 @@
 
 // TODO: Find better data structure for storing contents of GLSL source files
 // TODO: Improve copying content for size
-std::optional<uint32_t> ShaderCompiler::compile_sourcefile(const std::string &filename, GLenum shader_type) {
+std::optional<uint32_t> Shader::compile_sourcefile(const std::string &filename, GLenum shader_type) {
   uint32_t id = glCreateShader(shader_type);
   if (id == 0) {
     std::cout << "\x1b[31m[ERROR]: Couldn't create new shader object (returned ID of 0).\x1b[37m" << std::endl;
