@@ -4,6 +4,7 @@ const std = @import("std");
 // declaratively construct a build graph that will be executed by an external
 // runner.
 pub fn build(b: *std.Build) void {
+    const is_windows = b.option(bool, "windows", "Target Microsoft Windows") orelse false;
     // Standard target options allows the person running `zig build` to choose
     // what target to build for. Here we do not override the defaults, which
     // means any target is allowed, and the default is native. Other options
@@ -46,11 +47,14 @@ pub fn build(b: *std.Build) void {
 
     exe.linkLibCpp();
 
-    exe.linkSystemLibrary("GL");
-    exe.linkSystemLibrary("glfw3");
-    exe.linkSystemLibrary("pthread");
-    exe.linkSystemLibrary("dl");
-
+    if (is_windows) {
+        exe.linkSystemLibrary("openGL2");
+    } else {
+        exe.linkSystemLibrary("GL");
+        exe.linkSystemLibrary("glfw3");
+        exe.linkSystemLibrary("pthread");
+        exe.linkSystemLibrary("dl");
+    }
     // exe.linkLibrary()
 
     // This declares intent for the executable to be installed into the
