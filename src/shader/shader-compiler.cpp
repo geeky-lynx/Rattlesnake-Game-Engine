@@ -26,9 +26,6 @@ std::optional<uint32_t> Shader::compile_sourcefile(const char* filename, GLenum 
   source_buffer.clear();
   std::string line;
   while (getline(sourcefile, line)) {
-    static int line_count = 0;
-    std::cout << "Adding line #" << line_count++ << std::endl;
-
     if (line.length() + source_buffer.length() + 1 > source_buffer.capacity())
       source_buffer.resize(source_buffer.capacity() + 500);
 

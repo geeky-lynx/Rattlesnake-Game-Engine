@@ -2,6 +2,7 @@
 #define RGE_ARENA_IMPL
 
 #include "arena.hpp"
+#include <cassert>
 
 template <class T>
 Arena<T>::Arena(size_t capacity) {
@@ -66,7 +67,7 @@ bool Arena<T>::resize(size_t new_capacity) {
     return true;
 
   // Expand/Grow
-  T* new_buffer = ::operator new(new_capacity);
+  T* new_buffer = static_cast<T*>(::operator new(new_capacity));
   if (new_buffer == nullptr)
     return false;
   for (size_t index = 0; index < _length; index++)
@@ -89,8 +90,16 @@ void* Arena<T>::allocate(size_t amount) {
 
 template <class T>
 void* Arena<T>::allocate_aligned(size_t amount, uint8_t alignment) {
-  size_t corrected = (_length + 1) & 0xFF'FF'FF'FF'FF'FF'FF'F8;
-  return nullptr;
+  assert((alignment & (alignment - 1)) == 0); // Alignment should be power of 2
+
+  // Align to the greater divisible by `alignment`
+  void* ptr = (uintptr_t)(((unsigned char*)_buffer + _length) - (alignment - 1)) & -alignment;
+  
+  if (amount + (ptr - _buffer) > _capacity)
+    return nullptr;
+
+  _length = (ptr - _buffer) + amount;
+  return ptr;
 }
 
 template <class T>
