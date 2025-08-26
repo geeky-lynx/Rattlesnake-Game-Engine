@@ -23,7 +23,7 @@ void framebuffer_resize_callback(GLFWwindow *window, int width, int height) {
 
 void process_keyboard_inputs(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS )
-    glfwWindowShouldClose(window);
+    glfwSetWindowShouldClose(window, true);
 }
 
 int main(void) {
