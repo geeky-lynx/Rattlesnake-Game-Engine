@@ -5,6 +5,10 @@
 
 #include "shader/shader-compiler.hpp"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 const float vertices[] = {
      0.5f,  0.5f,  0.0f, // top right
      0.5f, -0.5f,  0.0f, // bot right
@@ -26,7 +30,7 @@ void process_keyboard_inputs(GLFWwindow *window) {
     glfwSetWindowShouldClose(window, true);
 }
 
-int main(void) {
+int c_main(void) {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -116,3 +120,7 @@ int main(void) {
   glfwTerminate();
   return 0;
 }
+
+#ifdef __cplusplus
+}
+#endif
